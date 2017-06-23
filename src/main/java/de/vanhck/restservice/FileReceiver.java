@@ -1,5 +1,6 @@
 package de.vanhck.restservice;
 
+import de.vanhck.data.DrivingResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class FileReceiver {
                     public void run() {
                         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                         try {
-                            new FileParser().createDrivingResultFromXML(bis);
+                            DrivingResult result =  new FileParser().createDrivingResultFromXML(bis); //FIXME
                             new FileSaver().saveFile(bis);
                         } catch (Exception e) {//FIXME, bad bad
                             log.error("Couldn't read file. ");
