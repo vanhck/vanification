@@ -1,10 +1,15 @@
 package de.vanhck.restservice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /**
@@ -15,6 +20,8 @@ import java.io.IOException;
  */
 @RestController
 public class FileReceiver {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final static String prefix = "[File Receiver] ";
 
     private static void printLine(String toPrint) {
@@ -24,15 +31,27 @@ public class FileReceiver {
     @PostMapping("/file")
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
-            byte[] bytes = new byte[0];
             try {
-                bytes = file.getBytes();
+                byte[] bytes = file.getBytes();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                        try {
+                            new FileParser().createDrivingResultFromXML(bis);
+                            new FileSaver().saveFile(bis);
+                        } catch (Exception e) {//FIXME, bad bad
+                            log.error("Couldn't read file. ");
+                        }
+                    }
+                }).start();
+                log.debug("received file: " + file.getOriginalFilename());
+                log.debug("file has " + bytes.length + " bytes");
+                return "success";
+
             } catch (IOException e) {
-                e.printStackTrace();
+                return "illegal file.";
             }
-            printLine("received file: " + file.getOriginalFilename());
-            printLine("file has " + bytes.length + " bytes");
-            return "success";
         } else {
             return "file is empty";
         }
