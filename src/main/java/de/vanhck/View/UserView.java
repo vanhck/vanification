@@ -16,7 +16,6 @@ import de.vanhck.Util;
 import de.vanhck.data.Score;
 import de.vanhck.data.User;
 import de.vanhck.data.UserDAO;
-import de.vanhck.data.Score;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -223,7 +222,7 @@ public class UserView extends ClosableView {
                 .responsive(true)
                 .title()
                 .display(true)
-                .text("Score over the last days")
+                .text("Score über die letzten Tage")
                 .and()
                 .tooltips()
                 .mode(InteractionMode.INDEX)
@@ -235,7 +234,7 @@ public class UserView extends ClosableView {
                 .add(Axis.X, new CategoryScale()
                         .scaleLabel()
                         .display(true)
-                        .labelString("Day")
+                        .labelString("Tag")
                         .and())
                 .add(Axis.Y, new LinearScale()
                         .scaleLabel()
@@ -313,7 +312,7 @@ public class UserView extends ClosableView {
             hardAccelerations.setValue(item == null ? "" : item.getHardAccelerationCount() + "");
             stops.setValue(item == null ? "" : item.getStopsCount() + "");
             timeWithConstKmH.setValue(item == null ? "" : item.getConstantVelocityKm() + "");
-            hardSidewaysAccelerations.setValue(item == null ? "" : item.getHardSidewayAcceleration() + "");
+            hardSidewaysAccelerations.setValue(item == null ? "" : item.getHardSidewaysAcceleration() + "");
         }
     }
 
@@ -328,11 +327,11 @@ public class UserView extends ClosableView {
         private Double hardAccelerationCount;
         private Double constantVelocityKm;
 
-        public int getHardSidewayAcceleration() {
-            return (int) Math.round(hardSidewayAcceleration);
+        public int getHardSidewaysAcceleration() {
+            return (int) Math.round(hardSidewaysAcceleration);
         }
 
-        private Double hardSidewayAcceleration;
+        private Double hardSidewaysAcceleration;
 
         public String getName() {
             return name;
@@ -379,20 +378,20 @@ public class UserView extends ClosableView {
             averageConsumption = 0d;
             hardStopsCount = 0d;
             hardAccelerationCount = 0d;
-            hardSidewayAcceleration = 0d;
+            hardSidewaysAcceleration = 0d;
             constantVelocityKm = 0d;
             stopsCount = 0d;
 
             for (Score score: user.getScores()) {
                 drivenKilometers += score.getCourse();
-                averageConsumption += score.getAverageFuelConsumption();
+                averageConsumption += score.getAverageFuelConsumption() * score.getCourse();
                 hardStopsCount += score.getHardAccelerationCount();
                 hardAccelerationCount += score.getHardAccelerationCount();
                 constantVelocityKm += score.getConstantVelocityKm();
                 stopsCount += score.getStopCount();
-                hardSidewayAcceleration += score.getSidewaysAcceleration();
+                hardSidewaysAcceleration += score.getSidewaysAcceleration();
             }
-            averageConsumption = averageConsumption / user.getScores().size();
+            averageConsumption = averageConsumption / drivenKilometers;
 
         }
 
