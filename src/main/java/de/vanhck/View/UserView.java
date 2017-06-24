@@ -1,10 +1,9 @@
 package de.vanhck.View;
 
-import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.*;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Label;
 import de.vanhck.data.User;
 
 import java.io.File;
@@ -38,40 +37,24 @@ public class UserView extends ClosableView {
 
     }
 
+    private Image getGreenIcon() {
+        return new Image("", new FileResource(new File((new File("")).getAbsolutePath()
+                + "\\src\\main\\resources\\icons\\green.png")));
+    }
+
     private void buildOverviewChart() {
-        Chart chart = new Chart(ChartType.COLUMN);
-        Configuration conf = chart.getConfiguration();
-        conf.setTitle("Übersicht");
+        addComponent(new Label("Übersicht"));
 
+        GridLayout layout = new GridLayout();
 
-        final String[] categories = new String[] { "1", "2", "13",
-                "4", "5", "6", "7", "8", "9", "10",
-                "11", "12", "13", "14", "15", "16", "17",
-                "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
-        };
+        Label label = new Label(VaadinIcons.SMILEY_O.getHtml(), ContentMode.HTML);
+        Label label2 = new Label(VaadinIcons.HEART.getHtml(), ContentMode.HTML);
+        Label label1 = new Label(VaadinIcons.ALARM.getHtml(), ContentMode.HTML);
 
-        XAxis x1 = new XAxis();
-        //conf.addxAxis(x1);
-        //x1.setCategories(categories);
-        //x1.setReversed(false);
-        x1.setMin(0);
-        x1.setMax(1000);
-        x1.setTitle("test");
-        conf.addxAxis(x1);
+        addComponent(label2);
+        addComponent(label);
 
-        YAxis y = new YAxis();
-        y.setCategories(categories);
-        y.setReversed(false);
-        //y.setMin(0);
-        //y.setMax(1000);
-        //y.setTitle(new AxisTitle("Score"));
-        conf.addyAxis(y);
-
-        conf.addSeries(new ListSeries("sas", 500, 600, 300, 400, 1000, 20));
-
-        chart.drawChart(conf);
-        addComponent(chart);
-
+        addComponent(label1);
     }
 
     private void buildBestUserList() {
