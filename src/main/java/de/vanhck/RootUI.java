@@ -7,8 +7,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import de.vanhck.View.*;
-import de.vanhck.data.OptionDAO;
-import de.vanhck.data.UserDAO;
+import de.vanhck.data.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -27,6 +26,12 @@ public class RootUI extends UI {
     private UserDAO userSaver;
     @Autowired
     private OptionDAO optionSaver;
+    @Autowired
+    private ScoreDAO scoreDao;
+    @Autowired
+    private DrivingKeyValueDAO drivingKeyValueDao;
+    @Autowired
+    private DrivingResultDAO drivingResultDao;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -65,7 +70,7 @@ public class RootUI extends UI {
         navigateToAdminViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                (new AdminView(optionSaver, userSaver, mainView,layout)).show();
+                (new AdminView(optionSaver, userSaver, mainView,layout,drivingKeyValueDao, drivingResultDao, scoreDao)).show();
             }
         });
         layout.addComponent(navigateToAdminViewButton);
