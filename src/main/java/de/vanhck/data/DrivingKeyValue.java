@@ -15,7 +15,7 @@ public class DrivingKeyValue {
     @ManyToOne(fetch = FetchType.LAZY)
     private KeyNameValue keyNameValue;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private DrivingResult matchingResult;
     private Double value;
 

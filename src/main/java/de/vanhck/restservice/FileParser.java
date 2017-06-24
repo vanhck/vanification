@@ -69,6 +69,7 @@ public class FileParser {
             valueOfKey = Double.valueOf(currentElement.getElementsByTagName("value").item(0).getTextContent());
             keyName = new DrivingKeyValue(keyNameValue, valueOfKey);
             keyName.setMatchingResult(drivingResult);
+            drivingKeyValueDAO.save(keyName);
             drivingResult.addValue(keyName);
 
         } catch (NumberFormatException e) {

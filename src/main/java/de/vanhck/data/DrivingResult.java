@@ -21,7 +21,7 @@ public class DrivingResult {
     private  String driversName;
     private  Double drivenKM;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "matchingResult")
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "matchingResult")
     private Collection<DrivingKeyValue> values;
 
     public DrivingResult(@NotNull  String fin,@NotNull String driversName,@NotNull Double drivenKM) {
