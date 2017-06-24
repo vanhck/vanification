@@ -1,29 +1,44 @@
 package de.vanhck.data;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Lotti on 6/23/2017.
  */
+@Entity
+@Table(name = "drivingresult")
 public class DrivingResult {
-    private final String fin;
-    private final String driversName;
-    private final Double drivenKM;
-    private Map<KeyValues, Double> values;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-    public DrivingResult(String fin, String driversName, Double drivenKM) {
+    private  String fin;
+    private  String driversName;
+    private  Double drivenKM;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "matchingResult")
+    private Collection<DrivingKeyValue> values;
+
+    public DrivingResult(@NotNull  String fin,@NotNull String driversName,@NotNull Double drivenKM) {
         this.fin = fin;
         this.driversName = driversName;
         this.drivenKM = drivenKM;
-        this.values = new HashMap<>();
+        this.values = new ArrayList<>();
     }
 
-    public void addValue(KeyValues name, double value){
-        values.put(name,value);
+    public DrivingResult() {
     }
 
-    public Map<KeyValues, Double> getValues() {
+    public void addValue(@NotNull DrivingKeyValue value){
+        values.add(value);
+    }
+
+    public Collection<DrivingKeyValue> getValues() {
         return values;
     }
 
@@ -33,5 +48,9 @@ public class DrivingResult {
 
     public String getFin() {
         return fin;
+    }
+
+    public Double getDrivenKM() {
+        return drivenKM;
     }
 }

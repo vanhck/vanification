@@ -1,9 +1,13 @@
 package de.vanhck.restservice;
 
+import de.vanhck.data.DrivingKeyValue;
 import de.vanhck.data.DrivingResult;
-import de.vanhck.data.KeyValues;
+import de.vanhck.data.KeyNameValue;
+import de.vanhck.data.dao.DrivingResultDAO;
+import de.vanhck.data.dao.KeyDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,9 +24,13 @@ import java.io.InputStream;
  * Created by Lotti on 6/23/2017.
  */
 public class FileParser {
+    @Autowired
+    private KeyDAO keyDao;
+    @Autowired
+    private DrivingResultDAO resultDAO;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public DrivingResult createDrivingResultFromXML(InputStream is) throws ParserConfigurationException, IOException, SAXException {
+    public boolean createDrivingResultFromXML(InputStream is) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(is);
@@ -40,26 +48,28 @@ public class FileParser {
             if (evaluentKeyElement(drivingResult, (Element) currentNode)) break;
 
         }
-
-        return drivingResult;
+        resultDAO.save(drivingResult);
+        return true;
     }
 
     private boolean evaluentKeyElement(DrivingResult drivingResult, Element currentNode) {
         Element currentElement;
-        KeyValues keyName;
+        DrivingKeyValue keyName;
         double valueOfKey;
         currentElement = currentNode;
+        KeyNameValue keyNameValue;
         String nameOfKey = currentElement.getElementsByTagName("name").item(0).getTextContent();
-        keyName = KeyValues.valueOf(nameOfKey);
-        if (keyName == null) {
-            log.error("Key isn't in list of supported values, now we ignore it");
+        keyNameValue = keyDao.findByKeyName(nameOfKey);
+        if (keyNameValue == null) {
+            log.error("KeyNameValue isn't in list of supported values, now we ignore it");
             return true;
         }
         try {
             valueOfKey = Double.valueOf(currentElement.getElementsByTagName("value").item(0).getTextContent());
-            drivingResult.addValue(keyName, valueOfKey);
+            keyName = new DrivingKeyValue(keyNameValue, valueOfKey);
+            drivingResult.addValue(keyName);
         } catch (NumberFormatException e) {
-            log.error(String.format("Value of key %s isn't parsable to double, we ignore this key", keyName.name()));
+            log.error(String.format("Value of keyNameValue %s isn't parsable to double, we ignore this keyNameValue", keyNameValue.getKeyName()));
             return true;
         }
         return false;

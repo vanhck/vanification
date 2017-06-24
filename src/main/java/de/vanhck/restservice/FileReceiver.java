@@ -39,7 +39,7 @@ public class FileReceiver {
                     public void run() {
                         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                         try {
-                            DrivingResult result =  new FileParser().createDrivingResultFromXML(bis); //FIXME
+                            new FileParser().createDrivingResultFromXML(bis); //FIXME
                             new FileSaver().saveFile(bis);
                         } catch (Exception e) {//FIXME, bad bad
                             log.error("Couldn't read file. ");
