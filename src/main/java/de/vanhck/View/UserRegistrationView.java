@@ -1,5 +1,6 @@
 package de.vanhck.View;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import de.vanhck.Util;
 import de.vanhck.data.User;
@@ -38,6 +39,7 @@ public class UserRegistrationView extends ClosableView {
         addComponent(pw2);
         addComponent(p);
         addComponent(q);
+        addUserButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         addUserButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {

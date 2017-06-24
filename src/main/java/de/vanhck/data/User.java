@@ -45,4 +45,9 @@ public class User {
     public void addScore( Score score){
         scores.add(score);
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

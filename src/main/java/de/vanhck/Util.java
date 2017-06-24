@@ -8,6 +8,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.util.Collection;
+import java.util.Date;
 
 public class Util {
     // The higher the number of iterations the more
@@ -60,5 +61,31 @@ public class Util {
         }
 
         return endCourse == 0 ? 0 : endScore / endCourse;
+    }
+
+    public static double getScoreFromTime(Collection<Score> scores, Date from) {
+        double endScore = 0;
+        double endCourse = 0;
+
+        for (Score score : scores) {
+            if (score.getDate().after(from)) {
+                endCourse += score.getCourse();
+                endScore += score.getScore();
+            }
+        }
+        return endCourse == 0 ? 0 : endScore / endCourse;
+    }
+
+    public static double getLastScore(Collection<Score> scores) {
+        double endScore = 0;
+        Date date = new Date(0);
+
+        for (Score score : scores) {
+            if (score.getDate().after(date)) {
+                date = score.getDate();
+                endScore = score.getScore() / score.getCourse();
+            }
+        }
+        return endScore;
     }
 }
