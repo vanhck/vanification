@@ -19,6 +19,14 @@ public class DrivingKeyValue {
     private DrivingResult matchingResult;
     private Double value;
 
+    public Double getValue() {
+        return value;
+    }
+
+    public KeyNameValue getKeyNameValue() {
+        return keyNameValue;
+    }
+
     public DrivingKeyValue(@NotNull KeyNameValue keyNameValue, @NotNull Double value){
         this.keyNameValue = keyNameValue;
         this.value = value;

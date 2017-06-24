@@ -32,6 +32,8 @@ public class FileReceiver {
 
     @Autowired
     private DrivingKeyValueDAO drivingKeyValueDAO;
+    @Autowired
+    private ScoreDAO scoreDAO;
 
     private static void printLine(String toPrint) {
         System.out.println(prefix + toPrint);
@@ -44,7 +46,8 @@ public class FileReceiver {
                 byte[] bytes = file.getBytes();
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 try {
-                    new FileParser(keyNameValueDAO, drivingResultDAO, drivingKeyValueDAO, userDAO).createDrivingResultFromXML(bis); //FIXME
+                    new FileParser(keyNameValueDAO, drivingResultDAO, drivingKeyValueDAO, userDAO, scoreDAO).createDrivingResultFromXML(bis);
+
                 } catch (Exception e) {//FIXME, bad bad
                     log.error("Couldn't read file.", e);
                 }
