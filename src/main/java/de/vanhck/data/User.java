@@ -1,9 +1,8 @@
 package de.vanhck.data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by Jonas on 24.06.2017.
@@ -19,12 +18,17 @@ public class User {
     private String name;
     private String pwHash;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+    private Collection<Score> scores;
+
     public User(String name, String pwHash) {
         this.name = name;
         this.pwHash = pwHash;
+        scores = new ArrayList<>();
     }
 
     public User() {
+        scores = new ArrayList<>();
     }
 
     public String getName() {
@@ -33,5 +37,12 @@ public class User {
 
     public String getPwHash() {
         return pwHash;
+    }
+
+    public Collection<Score> getScores() {
+        return scores;
+    }
+    public void addScore( Score score){
+        scores.add(score);
     }
 }

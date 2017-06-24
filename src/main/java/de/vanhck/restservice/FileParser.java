@@ -48,14 +48,19 @@ public class FileParser {
                 log.error("Node of values is not a Element");
                 break;
             }
-            if (evaluentKeyElement(drivingResult, (Element) currentNode)) break;
+            if (evaluateKeyElement(drivingResult, (Element) currentNode)) break;
 
         }
         resultDAO.save(drivingResult);
+        calcScore(drivingResult);
         return true;
     }
 
-    private boolean evaluentKeyElement(DrivingResult drivingResult, Element currentNode) {
+    private void calcScore(DrivingResult drivingResult) {
+
+    }
+
+    private boolean evaluateKeyElement(DrivingResult drivingResult, Element currentNode) {
         Element currentElement;
         DrivingKeyValue keyName;
         double valueOfKey;
