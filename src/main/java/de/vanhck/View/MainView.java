@@ -1,5 +1,6 @@
 package de.vanhck.View;
 
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -12,15 +13,22 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class MainView extends VerticalLayout {
     private HorizontalLayout horizontalLayout;
+    Label company;
 
     public MainView() {
         horizontalLayout = new HorizontalLayout();
-        horizontalLayout.addComponent(new Label("FIRMEN_NAME"));
-        horizontalLayout.addComponent(new Label(""));
+        company = new Label("FIRMEN_NAME");
+        horizontalLayout.addComponent(company);
+
         Label daimler = new Label("Daimler");
 
         horizontalLayout.addComponent(daimler);
+        horizontalLayout.setComponentAlignment(daimler, Alignment.TOP_RIGHT);
         horizontalLayout.setSizeFull();
         addComponent(horizontalLayout);
+    }
+
+    public void setCompanyName(String newName) {
+        company.setValue(newName);
     }
 }

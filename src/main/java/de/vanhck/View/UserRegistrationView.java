@@ -54,7 +54,6 @@ public class UserRegistrationView extends ClosableView {
                 String hash = Util.getSaltedHash(pw.getValue());
                 User newUser = new User(name.getValue(), hash);
                 userSaver.save(newUser);
-                //TODO add user to db
 
                 name.clear();
                 pw.clear();
