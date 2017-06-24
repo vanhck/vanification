@@ -1,13 +1,8 @@
 package de.vanhck.restservice;
 
-import de.vanhck.data.DrivingKeyValue;
-import de.vanhck.data.DrivingResult;
-import de.vanhck.data.KeyNameValue;
-import de.vanhck.data.dao.DrivingResultDAO;
-import de.vanhck.data.dao.KeyDAO;
+import de.vanhck.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,11 +19,17 @@ import java.io.InputStream;
  * Created by Lotti on 6/23/2017.
  */
 public class FileParser {
-    @Autowired
-    private KeyDAO keyDao;
-    @Autowired
+
+    private final DrivingKeyValueDAO drivingKeyValueDAO;
+    private KeyNameValueDAO keyNameValueDao;
     private DrivingResultDAO resultDAO;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO){
+        this.keyNameValueDao = keyNameValueDao;
+        this.resultDAO = resultDAO;
+        this.drivingKeyValueDAO = drivingKeyValueDAO;
+    }
 
     public boolean createDrivingResultFromXML(InputStream is) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -37,9 +38,9 @@ public class FileParser {
         doc.getDocumentElement().normalize();
         DrivingResult drivingResult = getGeneralData(doc);
 
-        NodeList value = doc.getElementsByTagName("value");
+        NodeList value = doc.getElementsByTagName("keyvalue");
         Node currentNode;
-        for (int i = 0; i <= value.getLength(); i++) {
+        for (int i = 0; i < value.getLength(); i++) {
             currentNode = value.item(i);
             if (currentNode.getNodeType() != Node.ELEMENT_NODE) {
                 log.error("Node of values is not a Element");
@@ -58,16 +59,18 @@ public class FileParser {
         double valueOfKey;
         currentElement = currentNode;
         KeyNameValue keyNameValue;
-        String nameOfKey = currentElement.getElementsByTagName("name").item(0).getTextContent();
-        keyNameValue = keyDao.findByKeyName(nameOfKey);
+        String nameOfKey = currentElement.getElementsByTagName("name").item(0).getTextContent().toUpperCase();
+        keyNameValue =  keyNameValueDao.findByKeyName(nameOfKey);
         if (keyNameValue == null) {
-            log.error("KeyNameValue isn't in list of supported values, now we ignore it");
+            log.error(String.format("KeyNameValue %s isn't in list of supported values, now we ignore it",nameOfKey));
             return true;
         }
         try {
             valueOfKey = Double.valueOf(currentElement.getElementsByTagName("value").item(0).getTextContent());
             keyName = new DrivingKeyValue(keyNameValue, valueOfKey);
+            keyName.setMatchingResult(drivingResult);
             drivingResult.addValue(keyName);
+
         } catch (NumberFormatException e) {
             log.error(String.format("Value of keyNameValue %s isn't parsable to double, we ignore this keyNameValue", keyNameValue.getKeyName()));
             return true;
@@ -83,7 +86,6 @@ public class FileParser {
         if (generalList.item(0).getNodeType() != Node.ELEMENT_NODE) {
             throw new IllegalArgumentException("General Node is not a Element!");
         }
-
         Element generalElement = (Element) generalList.item(0);
         String fin = generalElement.getElementsByTagName("fin").item(0).getTextContent();
         String user = generalElement.getElementsByTagName("user").item(0).getTextContent();

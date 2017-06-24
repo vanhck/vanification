@@ -1,7 +1,8 @@
-package de.vanhck.data.dao;
+package de.vanhck.data;
 
 import de.vanhck.data.DrivingResult;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 

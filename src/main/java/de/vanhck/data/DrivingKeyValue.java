@@ -26,4 +26,8 @@ public class DrivingKeyValue {
 
     public DrivingKeyValue() {
     }
+
+    public void setMatchingResult(DrivingResult matchingResult) {
+        this.matchingResult = matchingResult;
+    }
 }
