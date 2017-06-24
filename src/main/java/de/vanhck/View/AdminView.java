@@ -1,13 +1,11 @@
 package de.vanhck.View;
 
 import com.vaadin.data.HasValue;
-import com.vaadin.event.ContextClickEvent;
 import com.vaadin.shared.ui.slider.SliderOrientation;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Slider;
-import com.vaadin.ui.themes.ValoTheme;
 import de.vanhck.data.Option;
 import de.vanhck.data.OptionDAO;
 import de.vanhck.data.UserDAO;
@@ -41,10 +39,10 @@ public class AdminView extends ClosableView {
         layout.setSpacing(true);
         mainLayout.addComponent(layout, 1, 0);
 
-        layout.addComponent(new Label("Efficiency"), 0, 0);
-        layout.addComponent(new Label("Importance"), 1, 0);
+        layout.addComponent(new Label("Effizienz"), 0, 0);
+        layout.addComponent(new Label("Relevanz"), 1, 0);
 
-        layout.addComponent(new Label("Fuel compensation"), 0, 1);
+        layout.addComponent(new Label("Treibstoffverbrauch"), 0, 1);
         Slider fuelSlider = new Slider(0, 1, 2);
         fuelSlider.setValue(option.getaFuelConsumption());
         fuelSlider.setOrientation(SliderOrientation.HORIZONTAL);
@@ -57,7 +55,7 @@ public class AdminView extends ClosableView {
             }
         });
 
-        layout.addComponent(new Label("#Hard stops"), 0, 2);
+        layout.addComponent(new Label("Vollbremsungen"), 0, 2);
         Slider hardStopsSlider = new Slider(0, 1, 2);
         hardStopsSlider.setValue(option.getaHardStopCount());
         hardStopsSlider.setOrientation(SliderOrientation.HORIZONTAL);
@@ -70,7 +68,7 @@ public class AdminView extends ClosableView {
             }
         });
 
-        layout.addComponent(new Label("#Hard accelerations"), 0, 3);
+        layout.addComponent(new Label("Harte Beschleunigungen"), 0, 3);
         Slider hardAcclsSlider = new Slider(0, 1, 2);
         hardAcclsSlider.setValue(option.getaHardAccelerationCount());
         hardAcclsSlider.setOrientation(SliderOrientation.HORIZONTAL);
@@ -83,7 +81,7 @@ public class AdminView extends ClosableView {
             }
         });
 
-        layout.addComponent(new Label("Sideway acceleration"), 0, 4);
+        layout.addComponent(new Label("Seitwärtsbeschleunigung"), 0, 4);
         Slider sideWaySlider = new Slider(0, 1, 2);
         sideWaySlider.setValue(option.getaSidewaysAcceleration());
         sideWaySlider.setOrientation(SliderOrientation.HORIZONTAL);
@@ -96,7 +94,7 @@ public class AdminView extends ClosableView {
             }
         });
 
-        layout.addComponent(new Label("Constant velocity"), 0, 5);
+        layout.addComponent(new Label("Gleichbleibende Geschwindigkeit"), 0, 5);
         Slider constVeloSlider = new Slider(0, 1, 2);
         constVeloSlider.setValue(option.getaConstantVelocity());
         constVeloSlider.setOrientation(SliderOrientation.HORIZONTAL);
@@ -118,10 +116,10 @@ public class AdminView extends ClosableView {
         layout2.setSpacing(true);
         mainLayout.addComponent(layout2, 1, 1);
 
-        layout2.addComponent(new Label("Productivity"), 0, 0);
-        layout2.addComponent(new Label("Value"), 1, 0);
+        layout2.addComponent(new Label("Produktivität"), 0, 0);
+        layout2.addComponent(new Label("Wert"), 1, 0);
 
-        layout2.addComponent(new Label("Optimal number of stops per 10 km"), 0, 1);
+        layout2.addComponent(new Label("Optimale Anzahl an Stops pro 10 km"), 0, 1);
         Slider stopSlider = new Slider(0, 100);
         stopSlider.setValue((double)option.getEStops());
         stopSlider.setOrientation(SliderOrientation.HORIZONTAL);

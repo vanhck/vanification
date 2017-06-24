@@ -30,13 +30,13 @@ public class LoginView extends ClosableView {
 
         nameTextField = new TextField();
         nameTextField.setCaption("Name");
-        nameTextField.setDescription("Username");
+        nameTextField.setDescription("Bitte geben Sie ihren Benutzernamen ein");
 
         addComponent(nameTextField);
 
         pwTextField = new PasswordField();
         pwTextField.setCaption("Passwort");
-        pwTextField.setDescription("Password");
+        pwTextField.setDescription("Bitte geben Sie ihr Passwort ein");
 
         addComponent(pwTextField);
         addComponent(error);
@@ -55,13 +55,8 @@ public class LoginView extends ClosableView {
     }
 
     private void login() {
-        //TODO
         String name = nameTextField.getValue();
         String pw = pwTextField.getValue();
-        //TODO pw hashen
-
-
-
         if (name.isEmpty() || pw.isEmpty()) {
             error.setPopupVisible(true);
         } else {

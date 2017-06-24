@@ -4,7 +4,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import de.vanhck.View.*;
@@ -33,12 +32,7 @@ public class RootUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         mainView = new MainView();
         layout = new VerticalLayout();
-
-
-
-
-        layout.addComponent(new Label("Main Site"));
-
+        /*
         Button navigateToTestViewButton = new Button("goto test page");
         navigateToTestViewButton.addClickListener(new Button.ClickListener() {
             @Override
@@ -47,8 +41,9 @@ public class RootUI extends UI {
             }
         });
         layout.addComponent(navigateToTestViewButton);
+        */
 
-        Button navigateToLoginViewButton = new Button("goto login");
+        Button navigateToLoginViewButton = new Button("Login");
         navigateToLoginViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -57,7 +52,7 @@ public class RootUI extends UI {
         });
         layout.addComponent(navigateToLoginViewButton);
 
-        Button navigateToUserRegistrationViewButton = new Button("goto add user");
+        Button navigateToUserRegistrationViewButton = new Button("Benutzer hinzufügen");
         navigateToUserRegistrationViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -66,7 +61,7 @@ public class RootUI extends UI {
         });
         layout.addComponent(navigateToUserRegistrationViewButton);
 
-        Button navigateToAdminViewButton = new Button("goto admin");
+        Button navigateToAdminViewButton = new Button("Admin Seite");
         navigateToAdminViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -75,7 +70,7 @@ public class RootUI extends UI {
         });
         layout.addComponent(navigateToAdminViewButton);
 
-        Button navigateToRemoveUserViewButton = new Button("goto remove user");
+        Button navigateToRemoveUserViewButton = new Button("Benutzer entfernen");
         navigateToRemoveUserViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {

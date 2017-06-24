@@ -1,9 +1,9 @@
 package de.vanhck.View;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.server.FileResource;
+import com.vaadin.ui.*;
+
+import java.io.File;
 
 /**
  * Created by Jonas on 23.06.2017.
@@ -17,18 +17,16 @@ public class MainView extends VerticalLayout {
 
     public MainView() {
         horizontalLayout = new HorizontalLayout();
-        company = new Label("FIRMEN_NAME");
-        horizontalLayout.addComponent(company);
+        Image imageLogo = new Image("", new FileResource(new File((new File("")).getAbsolutePath()
+                + "\\src\\main\\resources\\LOGO_ScoreUp.png")));
+        Image imageCompany = new Image("", new FileResource(new File((new File("")).getAbsolutePath()
+                + "\\src\\main\\resources\\Daimler.png")));
 
-        Label daimler = new Label("Daimler");
-
-        horizontalLayout.addComponent(daimler);
-        horizontalLayout.setComponentAlignment(daimler, Alignment.TOP_RIGHT);
+        horizontalLayout.addComponent(imageCompany);
+        horizontalLayout.setComponentAlignment(imageCompany, Alignment.TOP_LEFT);
+        horizontalLayout.addComponent(imageLogo);
+        horizontalLayout.setComponentAlignment(imageLogo, Alignment.TOP_RIGHT);
         horizontalLayout.setSizeFull();
         addComponent(horizontalLayout);
-    }
-
-    public void setCompanyName(String newName) {
-        company.setValue(newName);
     }
 }

@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -47,7 +49,7 @@ public class UserView extends ClosableView {
     }
 
     private void buildOverviewChart() {
-        addComponent(new Label("Übersicht"));
+        addComponent(Util.makeBold(new Label("Übersicht")));
 
         GridLayout layout = new GridLayout(5,2);
         layout.setSpacing(true);
@@ -55,21 +57,21 @@ public class UserView extends ClosableView {
         layout.addComponent(new Label("Score"),0,0);
         layout.addComponent(new Label("Zeitraum"), 0 ,1);
         layout.addComponent(new Label("Gesamt"),1,1);
-        layout.addComponent(new Label("" + Util.getEndScore(user.getScores())),1,0);
+        layout.addComponent(new Label("" + Math.round(Util.getEndScore(user.getScores()))),1,0);
         layout.addComponent(new Label("lestzter Monat"),2,1);
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
         cal.add(Calendar.MONTH, -1);
         Date newDate = cal.getTime();
-        layout.addComponent(new Label("" + Util.getScoreFromTime(user.getScores(), newDate)),2,0);
+        layout.addComponent(new Label("" + Math.round(Util.getScoreFromTime(user.getScores(), newDate))),2,0);
         layout.addComponent(new Label("letzte Woche"), 3, 1);
         cal.setTime(now);
         cal.add(Calendar.WEEK_OF_MONTH, -1);
         newDate = cal.getTime();
-        layout.addComponent(new Label("" + Util.getScoreFromTime(user.getScores(),newDate)),3,0);
+        layout.addComponent(new Label("" + Math.round(Util.getScoreFromTime(user.getScores(),newDate))),3,0);
         layout.addComponent(new Label("letzte Fahrt"), 4, 1);
-        layout.addComponent(new Label("" + Util.getLastScore(user.getScores())),4,0);
+        layout.addComponent(new Label("" + Math.round(Util.getLastScore(user.getScores()))),4,0);
 
 
         addComponent(layout);
@@ -119,7 +121,7 @@ public class UserView extends ClosableView {
 
 
 
-        addComponent(new Label("Bestenliste"));
+        addComponent(Util.makeBold(new Label("Bestenliste")));
         addComponent(bestUsers);
     }
 
@@ -225,6 +227,8 @@ public class UserView extends ClosableView {
     }
 
     private class GridItem {
+        private DecimalFormat df;
+
         private String name;
         private Double score;
         private Double drivenKilometers;
@@ -241,12 +245,12 @@ public class UserView extends ClosableView {
             return (int) Math.round(score);
         }
 
-        public Double getDrivenKilometers() {
-            return drivenKilometers;
+        public String getDrivenKilometers() {
+            return df.format(drivenKilometers);
         }
 
-        public Double getAverageConsumption() {
-            return averageConsumption;
+        public String getAverageConsumption() {
+            return df.format(averageConsumption);
         }
 
         public int getHardStopsCount() {
@@ -257,8 +261,8 @@ public class UserView extends ClosableView {
             return (int) Math.round(hardAccelerationCount);
         }
 
-        public Double getConstantVelocityKm() {
-            return constantVelocityKm;
+        public String getConstantVelocityKm() {
+            return df.format(constantVelocityKm);
         }
 
         public int getStopsCount() {
@@ -268,6 +272,8 @@ public class UserView extends ClosableView {
         private Double stopsCount;
 
         public GridItem(User user) {
+            df = new DecimalFormat("#.#");
+            df.setRoundingMode(RoundingMode.CEILING);
             name = user.getName();
 
             score = Util.getEndScore(user.getScores());
