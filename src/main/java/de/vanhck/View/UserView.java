@@ -150,7 +150,7 @@ public class UserView extends ClosableView {
 
         addComponent(comboBox);
 
-        GridLayout layout = new GridLayout(3,8);
+        GridLayout layout = new GridLayout(3,9);
 
         layout.setSizeFull();
         GridColumn col1 = new GridColumn(new GridItem(user),layout,1);
@@ -171,8 +171,9 @@ public class UserView extends ClosableView {
         layout.addComponent(new Label("durchschnittlicher Verbrauch"),0, 3);
         layout.addComponent(new Label("Vollbremsungen"), 0, 4);
         layout.addComponent(new Label("harte Beschleunigungen"), 0, 5);
-        layout.addComponent(new Label("Stops"), 0, 6);
-        layout.addComponent(new Label("Zeit der gleichm. Fahrt"),0 ,7);
+        layout.addComponent(new Label("harte Seitwärtsbeschleunigungen"), 0 ,6);
+        layout.addComponent(new Label("Stops"), 0, 7);
+        layout.addComponent(new Label("Zeit der gleichm. Fahrt"),0 ,8);
 
         addComponent(layout);
     }
@@ -187,6 +188,7 @@ public class UserView extends ClosableView {
         private Label avConsumption;
         private Label hardStops;
         private Label hardAccelerations;
+        private Label hardSidewaysAccelerations;
         private Label stops;
         private Label timeWithConstKmH;
 
@@ -197,6 +199,7 @@ public class UserView extends ClosableView {
             avConsumption = new Label();
             hardStops = new Label();
             hardAccelerations = new Label();
+            hardSidewaysAccelerations = new Label();
             stops = new Label();
             timeWithConstKmH = new Label();
             setGridItem(item);
@@ -207,10 +210,9 @@ public class UserView extends ClosableView {
             layout.addComponent(avConsumption, column, 3);
             layout.addComponent(hardStops, column, 4);
             layout.addComponent(hardAccelerations, column, 5);
-            layout.addComponent(stops, column, 6);
-            layout.addComponent(timeWithConstKmH, column, 7);
-
-
+            layout.addComponent(hardSidewaysAccelerations, column, 6);
+            layout.addComponent(stops, column, 7);
+            layout.addComponent(timeWithConstKmH, column, 8);
         }
 
         public void setGridItem(GridItem item) {
@@ -223,6 +225,7 @@ public class UserView extends ClosableView {
             hardAccelerations.setValue(item == null ? "" : item.getHardAccelerationCount() + "");
             stops.setValue(item == null ? "" : item.getStopsCount() + "");
             timeWithConstKmH.setValue(item == null ? "" : item.getConstantVelocityKm() + "");
+            hardSidewaysAccelerations.setValue(item == null ? "" : item.getHardSidewayAcceleration() + "");
         }
     }
 
@@ -236,6 +239,12 @@ public class UserView extends ClosableView {
         private Double hardStopsCount;
         private Double hardAccelerationCount;
         private Double constantVelocityKm;
+
+        public int getHardSidewayAcceleration() {
+            return (int) Math.round(hardSidewayAcceleration);
+        }
+
+        private Double hardSidewayAcceleration;
 
         public String getName() {
             return name;
@@ -282,10 +291,10 @@ public class UserView extends ClosableView {
             averageConsumption = 0d;
             hardStopsCount = 0d;
             hardAccelerationCount = 0d;
+            hardSidewayAcceleration = 0d;
             constantVelocityKm = 0d;
             stopsCount = 0d;
 
-            //TODO neue score berechnung hierher ziehen
             for (Score score: user.getScores()) {
                 drivenKilometers += score.getCourse();
                 averageConsumption += score.getAverageFuelConsumption();
@@ -293,6 +302,7 @@ public class UserView extends ClosableView {
                 hardAccelerationCount += score.getHardAccelerationCount();
                 constantVelocityKm += score.getConstantVelocityKm();
                 stopsCount += score.getStopCount();
+                hardSidewayAcceleration += score.getSidewaysAcceleration();
             }
             averageConsumption = averageConsumption / user.getScores().size();
 

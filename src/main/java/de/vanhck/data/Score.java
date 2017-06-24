@@ -26,6 +26,12 @@ public class Score {
 
     private double constantVelocityKm;
 
+    public double getSidewaysAcceleration() {
+        return sidewaysAcceleration;
+    }
+
+    private double sidewaysAcceleration;
+
     public double getAverageFuelConsumption() {
         return averageFuelConsumption;
     }
@@ -64,7 +70,7 @@ public class Score {
     }
 
     public Score(Double score, Double course, User driver, Date creationDate, Double averageFuelConsumption,
-                 Double hardStopCount, Double hardAccelerationCount, Double constantVelocityKm, Double stopCount){
+                 Double hardStopCount, Double hardAccelerationCount, Double constantVelocityKm, Double stopCount, Double sidewaysAcceleration){
         this.score = score;
         this.course = course;
         this.user = driver;
@@ -74,6 +80,7 @@ public class Score {
         this.hardAccelerationCount = hardAccelerationCount;
         this.constantVelocityKm = constantVelocityKm;
         this.stopCount = stopCount;
+        this.sidewaysAcceleration = sidewaysAcceleration;
     }
 
    public  Score(){}
