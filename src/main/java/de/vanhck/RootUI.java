@@ -7,7 +7,9 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import de.vanhck.restservice.FileSender;
+import de.vanhck.View.LoginView;
+import de.vanhck.View.MainView;
+import de.vanhck.View.TestView;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
@@ -19,18 +21,39 @@ import de.vanhck.restservice.FileSender;
 @Theme("mytheme")
 @SpringUI
 public class RootUI extends UI {
+    private MainView mainView;
+    private VerticalLayout layout;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.addComponent(new Label("Test Site"));
-        Button button = new Button("send file");
-        button.addClickListener((Button.ClickListener) clickEvent -> {
+        mainView = new MainView();
+        layout = new VerticalLayout();
 
-            FileSender.sendFile();
-            //System.out.println(new File("").getAbsolutePath());
+
+
+
+        layout.addComponent(new Label("Main Site"));
+
+        Button navigateToTestViewButton = new Button("goto test page");
+        navigateToTestViewButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                (new TestView(mainView, layout)).show();
+            }
         });
-        layout.addComponent(button);
+        layout.addComponent(navigateToTestViewButton);
 
-        setContent(layout);
+        Button navigateToLoginViewButton = new Button("goto login");
+        navigateToLoginViewButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                (new LoginView(mainView, layout)).show();
+            }
+        });
+        layout.addComponent(navigateToLoginViewButton);
+
+        mainView.addComponent(layout);
+        setContent(mainView);
     }
+
 }
