@@ -3,6 +3,7 @@ package de.vanhck;
 import de.vanhck.data.*;
 import javafx.util.Pair;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -43,9 +44,9 @@ public class Scoring {
         Double stops = getValueForName(result, "stops");
         if(stops!= null) {
             double w_stops = 10 * (1 / (Math.abs(1 - stops / (e_stops * result.getDrivenKM())) + 0.01));
-            return new Score(0.6 * sum_efficiency + 0.4 * w_stops, result.getDrivenKM());
+            return new Score(0.6 * sum_efficiency + 0.4 * w_stops, result.getDrivenKM(),  result.getDriver(), new Date(System.currentTimeMillis()));
         }else{
-            return new Score(sum_efficiency, result.getDrivenKM());
+            return new Score(sum_efficiency, result.getDrivenKM(), result.getDriver(), new Date(System.currentTimeMillis()));
         }
     }
 

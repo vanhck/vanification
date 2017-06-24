@@ -57,6 +57,8 @@ public class FileParser {
         resultDAO.save(drivingResult);
         Score score = Scoring.getScore(drivingResult, drivingKeyValueDAO);
         scoreDao.save(score);
+        drivingResult.getDriver().addScore(score);
+        userDao.save(drivingResult.getDriver());
         return true;
     }
 

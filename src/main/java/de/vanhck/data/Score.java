@@ -33,8 +33,12 @@ public class Score {
         return course;
     }
 
-    public Score(Double score, Double course){
+    public Score(Double score, Double course, User driver, Date creationDate){
         this.score = score;
         this.course = course;
+        this.user = driver;
+        this.date = creationDate;
     }
+
+   public  Score(){}
 }

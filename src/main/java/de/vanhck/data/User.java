@@ -1,5 +1,7 @@
 package de.vanhck.data;
 
+import de.vanhck.Scoring;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
