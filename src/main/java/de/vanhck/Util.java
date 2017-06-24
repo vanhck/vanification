@@ -4,6 +4,8 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import de.vanhck.data.Score;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -13,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 
 public class Util {
+
     // The higher the number of iterations the more
     // expensive computing the hash is for us and
     // also for an attacker.
@@ -67,14 +70,12 @@ public class Util {
 
     public static double getEndScore(Collection<Score> scores) {
         double endScore = 0;
-        double endCourse = 0;
 
         for (Score score : scores) {
-            endCourse += score.getCourse();
-            endScore += score.getScore();
+            endScore+=score.getScore();
         }
-
-        return endCourse == 0 ? 0 : endScore / endCourse;
+        int dayCount = getDayCount(scores);
+        return endScore/ (dayCount*100);
     }
 
     public static double getScoreFromTime(Collection<Score> scores, Date from) {
@@ -95,11 +96,13 @@ public class Util {
         Date date = new Date(0);
 
         for (Score score : scores) {
-            if (score.getDate() != null && score.getDate().after(date)) {
-                date = score.getDate();
-                endScore = score.getScore() / score.getCourse();
-            }
+            endScore+=score.getScore();
         }
-        return endScore;
+        return endScore/getDayCount(scores);
+    }
+
+    public static int getDayCount(Collection<Score> scores) {
+        return (int) scores.stream().map(score -> score.getDate().getMonth()*30+score.getDate().getDate()).distinct().count();
     }
 }
+
