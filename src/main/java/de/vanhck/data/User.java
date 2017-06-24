@@ -31,7 +31,7 @@ public class User {
         return name;
     }
 
-    public boolean hasEqualPassword(String inHash) {
-        return pwHash.equals(inHash);
+    public String getPwHash() {
+        return pwHash;
     }
 }

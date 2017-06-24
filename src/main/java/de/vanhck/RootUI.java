@@ -52,7 +52,7 @@ public class RootUI extends UI {
         navigateToLoginViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                (new LoginView(mainView, layout)).show();
+                (new LoginView(userSaver, mainView, layout)).show();
             }
         });
         layout.addComponent(navigateToLoginViewButton);

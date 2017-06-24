@@ -1,7 +1,9 @@
 package de.vanhck.View;
 
 import com.vaadin.ui.*;
+import de.vanhck.Util;
 import de.vanhck.data.User;
+import de.vanhck.data.UserDAO;
 
 /**
  * Created by Jonas on 23.06.2017.
@@ -12,11 +14,16 @@ import de.vanhck.data.User;
 public class LoginView extends ClosableView {
     private TextField nameTextField;
     private PasswordField pwTextField;
+    private UserDAO userSaver;
+
+    private PopupView error;
 
 
-    public LoginView(Layout parentLayout, Layout toClose) {
+    public LoginView(UserDAO userSaver, Layout parentLayout, Layout toClose) {
         super(parentLayout, toClose);
 
+        this.userSaver = userSaver;
+        error = new PopupView(null, new Label("Falscher Benutzername oder Passwort"));
         Label signUp = new Label("Anmeldung");
         addComponent(signUp);
 
@@ -31,6 +38,7 @@ public class LoginView extends ClosableView {
         pwTextField.setDescription("Password");
 
         addComponent(pwTextField);
+        addComponent(error);
 
         addComponent(new Label(""));
 
@@ -50,15 +58,27 @@ public class LoginView extends ClosableView {
         String pw = pwTextField.getValue();
         //TODO pw hashen
 
+
+
         if (name.isEmpty() || pw.isEmpty()) {
-            addComponent(new Label("Passwort oder Name falsch"));
+            error.setPopupVisible(true);
         } else {
-            //get user from db, check if pw is correct, if yes proceed to the UserView
-            User user = new User("root","root");
-            (new UserView(user, super.getParentComponent(), this)).show();
+            User tmp = userSaver.findByName(name);
+            if (tmp != null) {
+                try {
+                    boolean correctPw = Util.check(pw, tmp.getPwHash());
+                    if (correctPw) {
+                        (new UserView(tmp, super.getParentComponent(), this)).show();
+                    } else {
+                        error.setPopupVisible(true);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    error.setPopupVisible(true);
+                }
+            } else {
+                error.setPopupVisible(true);
+            }
         }
     }
-
-
-
 }
