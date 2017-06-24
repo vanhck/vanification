@@ -1,7 +1,6 @@
 package de.vanhck;
 
 import de.vanhck.data.*;
-import javafx.util.Pair;
 
 import java.util.Date;
 import java.util.Optional;

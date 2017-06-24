@@ -4,8 +4,6 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Label;
 import de.vanhck.data.Score;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -13,6 +11,7 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 public class Util {
 
@@ -56,15 +55,6 @@ public class Util {
         return Base64.encodeBase64String(key.getEncoded());
     }
 
-    public static double getSumCourse(Collection<Score> scores) {
-        double endCourse = 0;
-        for (Score score: scores) {
-            endCourse += score.getCourse();
-        }
-        return endCourse;
-    }
-
-
     public static Label makeBold(Label label) {
         return new Label("<b>" + label.getValue() + "</b>", ContentMode.HTML);
     }
@@ -80,26 +70,29 @@ public class Util {
     }
 
     public static double getScoreFromTime(Collection<Score> scores, Date from) {
-        double endScore = 0;
-        double endCourse = 0;
+        Collection<Score> scoresInTime = new HashSet<>();
 
         for (Score score : scores) {
             if (score.getDate() != null && score.getDate().after(from)) {
-                endCourse += score.getCourse();
-                endScore += score.getScore();
+                scoresInTime.add(score);
             }
         }
-        return endCourse == 0 ? 0 : endScore / endCourse;
+        return getEndScore(scoresInTime);
     }
 
     public static double getLastScore(Collection<Score> scores) {
-        double endScore = 0;
+        Score endScore = null;
         Date date = new Date(0);
 
         for (Score score : scores) {
-            endScore+=score.getScore();
+            if (score.getDate() != null && score.getDate().after(date)) {
+                date = score.getDate();
+                endScore = score;
+            }
         }
-        return endScore/getDayCount(scores);
+        Collection<Score> scores1 = new HashSet<>();
+        scores1.add(endScore);
+        return getEndScore(scores1);
     }
 
     public static int getDayCount(Collection<Score> scores) {
