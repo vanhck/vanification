@@ -10,6 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 import de.vanhck.View.LoginView;
 import de.vanhck.View.MainView;
 import de.vanhck.View.TestView;
+import de.vanhck.View.UserRegistrationView;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
@@ -51,6 +52,15 @@ public class RootUI extends UI {
             }
         });
         layout.addComponent(navigateToLoginViewButton);
+
+        Button navigateToUserRegistrationViewButton = new Button("goto add user");
+        navigateToUserRegistrationViewButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                (new UserRegistrationView(mainView,layout)).show();
+            }
+        });
+        layout.addComponent(navigateToUserRegistrationViewButton);
 
         mainView.addComponent(layout);
         setContent(mainView);
