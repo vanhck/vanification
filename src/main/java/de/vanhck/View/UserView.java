@@ -147,8 +147,11 @@ public class UserView extends ClosableView {
         layout.setSizeFull();
         myName.setValue(user.getName());
         Label myScore = new Label();
+        Label myCourse = new Label();
         myScore.setValue(Util.getEndScore(user.getScores()) + "");
+        myCourse.setValue(Util.getSumCourse(user.getScores()) + "");
         Label compareScore = new Label();
+        Label compareCourse = new Label();
 
         Label compareName = new Label();
         compareName.setValue(comboBox.getValue() == null ? "" : comboBox.getValue().toString());
@@ -158,6 +161,7 @@ public class UserView extends ClosableView {
             public void valueChange(HasValue.ValueChangeEvent valueChangeEvent) {
                 compareName.setValue(comboBox.getValue() == null ? "" : comboBox.getValue().toString());
                 compareScore.setValue(comboBox.getValue() == null ? "" : "" + Util.getEndScore(((User) comboBox.getValue()).getScores()));
+                compareCourse.setValue(comboBox.getValue() == null ? "" : "" + Util.getSumCourse(((User) comboBox.getValue()).getScores()));
             }
         });
 
@@ -165,6 +169,8 @@ public class UserView extends ClosableView {
         layout.addComponent(compareName, 2, 0);
         layout.addComponent(myScore, 1, 1);
         layout.addComponent(compareScore, 2, 1);
+        layout.addComponent(myCourse, 1, 2);
+        layout.addComponent(compareCourse, 2, 2);
         layout.addComponent(new Label("Score"),0,1);
         layout.addComponent(new Label("gefahrene Kilometer"),0,2);
         layout.addComponent(new Label("durchschnittlicher Verbrauch"),0, 3);

@@ -53,6 +53,14 @@ public class Util {
         return Base64.encodeBase64String(key.getEncoded());
     }
 
+    public static double getSumCourse(Collection<Score> scores) {
+        double endCourse = 0;
+        for (Score score: scores) {
+            endCourse += score.getCourse();
+        }
+        return endCourse;
+    }
+
     public static Label makeBold(Label label) {
         return new Label("<b>" + label.getValue() + "</b>", ContentMode.HTML);
     }
