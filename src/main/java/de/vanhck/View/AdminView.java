@@ -2,13 +2,12 @@ package de.vanhck.View;
 
 import com.vaadin.data.HasValue;
 import com.vaadin.shared.ui.slider.SliderOrientation;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.Slider;
-import de.vanhck.data.Option;
-import de.vanhck.data.OptionDAO;
-import de.vanhck.data.UserDAO;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
+import de.vanhck.data.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by renx on 24.06.17.
@@ -16,8 +15,11 @@ import de.vanhck.data.UserDAO;
 public class AdminView extends ClosableView {
 
     private Option option;
+    private DrivingKeyValueDAO drivingKeyValueDao;
+    private DrivingResultDAO resultDAO;
+    private ScoreDAO scoreDAO;
 
-    public AdminView(OptionDAO optionSaver, UserDAO userSaver, Layout parentLayout, Layout toClose) {
+    public AdminView(OptionDAO optionSaver, UserDAO userSaver, Layout parentLayout, Layout toClose, DrivingKeyValueDAO drivingKeyValueDao, DrivingResultDAO resultDAO, ScoreDAO scoreDAO) {
         super(parentLayout, toClose);
         if (!optionSaver.findAll().iterator().hasNext()) {
             option = new Option();
@@ -25,7 +27,9 @@ public class AdminView extends ClosableView {
         } else {
             option = optionSaver.findAll().iterator().next();
         }
-
+        this.drivingKeyValueDao = drivingKeyValueDao;
+        this.scoreDAO = scoreDAO;
+        this.resultDAO = resultDAO;
         GridLayout mainLayout = new GridLayout(4, 4);
         mainLayout.setSpacing(true);
         addComponent(mainLayout);
@@ -155,5 +159,18 @@ public class AdminView extends ClosableView {
                 }
             }
         });
+
+        Button resetButton = new Button("Alle Fahrtdaten löschen!");
+        mainLayout.addComponent(resetButton);
+        resetButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                drivingKeyValueDao.deleteAll();
+                scoreDAO.deleteAll();
+                resultDAO.deleteAll();
+            }
+        });
+
+
     }
 }

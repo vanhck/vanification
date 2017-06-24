@@ -38,4 +38,8 @@ public class DrivingKeyValue {
     public void setMatchingResult(DrivingResult matchingResult) {
         this.matchingResult = matchingResult;
     }
+
+    public long getId() {
+        return id;
+    }
 }

@@ -48,7 +48,7 @@ public class Score {
 
     private double stopCount;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     public User user;
 
     public Date getDate() {
