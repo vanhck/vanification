@@ -1,11 +1,13 @@
 package de.vanhck;
 
+import de.vanhck.data.Score;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
+import java.util.Collection;
 
 public class Util {
     // The higher the number of iterations the more
@@ -46,5 +48,17 @@ public class Util {
                 password.toCharArray(), salt, iterations, desiredKeyLen)
         );
         return Base64.encodeBase64String(key.getEncoded());
+    }
+
+    public static double getEndScore(Collection<Score> scores) {
+        double endScore = 0;
+        double endCourse = 0;
+
+        for (Score score : scores) {
+            endCourse += score.getCourse();
+            endScore += score.getScore();
+        }
+
+        return endCourse == 0 ? 0 : endScore / endCourse;
     }
 }

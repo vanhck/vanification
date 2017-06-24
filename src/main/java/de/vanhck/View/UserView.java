@@ -2,9 +2,14 @@ package de.vanhck.View;
 
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.*;
+import de.vanhck.Util;
 import de.vanhck.data.User;
+import de.vanhck.data.UserDAO;
 
 import java.io.File;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Jonas on 24.06.2017.
@@ -15,10 +20,12 @@ import java.io.File;
 public class UserView extends ClosableView {
     private User user;
     private GridLayout bestUsers;
+    private UserDAO userSaver;
 
-    public UserView(User user, Layout parentComponent, Layout toClose) {
+    public UserView(UserDAO userSaver, User user, Layout parentComponent, Layout toClose) {
         super(parentComponent, toClose);
         this.user = user;
+        this.userSaver = userSaver;
 
         Image image = new Image("", new FileResource(new File((new File("")).getAbsolutePath()
                 + "\\src\\main\\resources\\price.png")));
@@ -61,7 +68,6 @@ public class UserView extends ClosableView {
     }
 
     private void buildBestUserList() {
-        //TODO get number of users to display
         bestUsers = new GridLayout(3,11);
         bestUsers.setSizeFull();
         Label rank = new Label("Platz");
@@ -70,6 +76,31 @@ public class UserView extends ClosableView {
         bestUsers.addComponent(rank);
         bestUsers.addComponent(score);
         bestUsers.addComponent(name);
+
+
+        Iterable<User> users = userSaver.findAll();
+        List<User> tmpUsers = new LinkedList<>();
+        for (User user : users) {
+            tmpUsers.add(user);
+        }
+        tmpUsers.sort(new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                return (int) Math.round(Util.getEndScore(o1.getScores()) - Util.getEndScore(o2.getScores()));
+
+            }
+        });
+        for (int i = 1; i <= tmpUsers.size(); i++) {
+            bestUsers.addComponent(new Label("" + i), 0, i);
+            User user = tmpUsers.get(i - 1);
+            long scoreInt = Math.round(Util.getEndScore(user.getScores()));
+            bestUsers.addComponent(new Label("" + scoreInt), 1, i);
+            bestUsers.addComponent(new Label(user.getName()), 2, i);
+        }
+
+
+        //TODO get number of users to display
+
 
         addComponent(new Label("Bestenliste"));
         addComponent(bestUsers);

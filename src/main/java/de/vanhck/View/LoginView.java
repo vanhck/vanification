@@ -68,7 +68,7 @@ public class LoginView extends ClosableView {
                 try {
                     boolean correctPw = Util.check(pw, tmp.getPwHash());
                     if (correctPw) {
-                        (new UserView(tmp, super.getParentComponent(), this)).show();
+                        (new UserView(userSaver, tmp, super.getParentComponent(), this)).show();
                     } else {
                         error.setPopupVisible(true);
                     }

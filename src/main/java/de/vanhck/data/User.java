@@ -18,7 +18,7 @@ public class User {
     private String name;
     private String pwHash;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Collection<Score> scores;
 
     public User(String name, String pwHash) {

@@ -1,7 +1,5 @@
 package de.vanhck.data;
 
-import org.hibernate.annotations.ManyToAny;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -15,9 +13,23 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    public Date getDate() {
+        return date;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
     private Date date;
 
     private int score;
+
+    public double getCourse() {
+        return course;
+    }
+
+    private double course;
 
     @ManyToOne(cascade = CascadeType.ALL)
     public User user;
