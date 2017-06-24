@@ -7,10 +7,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import de.vanhck.View.LoginView;
-import de.vanhck.View.MainView;
-import de.vanhck.View.TestView;
-import de.vanhck.View.UserRegistrationView;
+import de.vanhck.View.*;
 import de.vanhck.data.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,6 +62,16 @@ public class RootUI extends UI {
             }
         });
         layout.addComponent(navigateToUserRegistrationViewButton);
+
+        Button navigateToRemoveUserViewButton = new Button("goto remove user");
+        navigateToRemoveUserViewButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                (new UserRemovalView(userSaver,mainView, layout)).show();
+            }
+        });
+        layout.addComponent(navigateToRemoveUserViewButton);
+
 
         mainView.addComponent(layout);
         setContent(mainView);
