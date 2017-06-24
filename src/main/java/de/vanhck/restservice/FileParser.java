@@ -1,5 +1,6 @@
 package de.vanhck.restservice;
 
+import de.vanhck.Scoring;
 import de.vanhck.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +23,17 @@ public class FileParser {
 
     private final DrivingKeyValueDAO drivingKeyValueDAO;
     private final UserDAO userDao;
+    private final ScoreDAO scoreDao;
     private KeyNameValueDAO keyNameValueDao;
     private DrivingResultDAO resultDAO;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO, UserDAO userDAO){
+    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO, UserDAO userDAO, ScoreDAO scoreDao){
         this.keyNameValueDao = keyNameValueDao;
         this.resultDAO = resultDAO;
         this.drivingKeyValueDAO = drivingKeyValueDAO;
         this.userDao = userDAO;
+        this.scoreDao = scoreDao;
     }
 
     public boolean createDrivingResultFromXML(InputStream is) throws ParserConfigurationException, IOException, SAXException {
@@ -52,13 +55,12 @@ public class FileParser {
 
         }
         resultDAO.save(drivingResult);
-        calcScore(drivingResult);
+        Score score = Scoring.getScore(drivingResult, drivingKeyValueDAO);
+        scoreDao.save(score);
         return true;
     }
 
-    private void calcScore(DrivingResult drivingResult) {
 
-    }
 
     private boolean evaluateKeyElement(DrivingResult drivingResult, Element currentNode) {
         Element currentElement;
