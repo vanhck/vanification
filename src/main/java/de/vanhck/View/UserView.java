@@ -131,6 +131,7 @@ public class UserView extends ClosableView {
         Component chart = getChart(tmpUsers);
         chart.setWidth(50, Unit.PERCENTAGE);
         addComponent(chart);
+        setComponentAlignment(chart, Alignment.TOP_CENTER);
 
         addComponent(Util.makeBold(new Label("Bestenliste")));
         addComponent(bestUsers);
