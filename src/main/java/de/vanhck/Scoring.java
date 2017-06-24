@@ -2,7 +2,6 @@ package de.vanhck;
 
 import de.vanhck.data.*;
 
-import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -43,9 +42,9 @@ public class Scoring {
         Double stops = getValueForName(result, "stops");
         if (stops != null) {
             double w_stops = 10 * (1 / (Math.abs(1 - stops / (e_stops * result.getDrivenKM())) + 0.01));
-            return new Score(option.getEffiency() * sum_efficiency + option.getProductivity() * w_stops, result.getDrivenKM(), result.getDriver(), new Date(System.currentTimeMillis()),fuelConsumption,hardStopCount,hardAccelerationCount,constantVelocityKm, hardStopCount, sidewaysAccelerationS);
+            return new Score(option.getEffiency() * sum_efficiency + option.getProductivity() * w_stops, result.getDrivenKM(), result.getDriver(), result.getTime(),fuelConsumption,hardStopCount,hardAccelerationCount,constantVelocityKm, hardStopCount, sidewaysAccelerationS);
         } else {
-            return new Score(sum_efficiency, result.getDrivenKM(), result.getDriver(), new Date(System.currentTimeMillis()),fuelConsumption,hardStopCount,hardAccelerationCount,constantVelocityKm, hardStopCount, sidewaysAccelerationS);
+            return new Score(sum_efficiency, result.getDrivenKM(), result.getDriver(), result.getTime(),fuelConsumption,hardStopCount,hardAccelerationCount,constantVelocityKm, hardStopCount, sidewaysAccelerationS);
         }
     }
 

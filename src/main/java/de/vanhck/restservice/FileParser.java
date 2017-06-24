@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 /**
  * Created by Lotti on 6/23/2017.
@@ -108,6 +109,8 @@ public class FileParser {
             throw new IllegalArgumentException("user isn't registered, please register first!");
         }
         Double drivenKM = Double.valueOf(generalElement.getElementsByTagName("drivenKM").item(0).getTextContent());
-        return new DrivingResult(fin, user, drivenKM);
+
+        Date date = new Date(Long.valueOf(generalElement.getElementsByTagName("dateTime").item(0).getTextContent()));
+        return new DrivingResult(fin, user, drivenKM, date);
     }
 }
