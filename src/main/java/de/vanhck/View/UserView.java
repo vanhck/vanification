@@ -1,5 +1,14 @@
 package de.vanhck.View;
 
+import com.byteowls.vaadin.chartjs.ChartJs;
+import com.byteowls.vaadin.chartjs.config.LineChartConfig;
+import com.byteowls.vaadin.chartjs.data.Data;
+import com.byteowls.vaadin.chartjs.data.Dataset;
+import com.byteowls.vaadin.chartjs.data.LineDataset;
+import com.byteowls.vaadin.chartjs.options.InteractionMode;
+import com.byteowls.vaadin.chartjs.options.scale.Axis;
+import com.byteowls.vaadin.chartjs.options.scale.CategoryScale;
+import com.byteowls.vaadin.chartjs.options.scale.LinearScale;
 import com.vaadin.data.HasValue;
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.*;
@@ -7,6 +16,7 @@ import de.vanhck.Util;
 import de.vanhck.data.Score;
 import de.vanhck.data.User;
 import de.vanhck.data.UserDAO;
+import de.vanhck.data.Score;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +129,9 @@ public class UserView extends ClosableView {
         }
 
 
-
+        Component chart = getChart(tmpUsers);
+        chart.setWidth(50, Unit.PERCENTAGE);
+        addComponent(chart);
 
         addComponent(Util.makeBold(new Label("Bestenliste")));
         addComponent(bestUsers);
@@ -176,6 +188,82 @@ public class UserView extends ClosableView {
         layout.addComponent(new Label("Zeit der gleichm. Fahrt"),0 ,8);
 
         addComponent(layout);
+    }
+
+    public Component getChart(List<User> users) {
+        Random rand = new Random();
+        Date minDate = Calendar.getInstance().getTime();
+        for (User user : users) {
+            for (Score score : user.getScores()) {
+                Date date = score.getDate();
+                if (date.compareTo(minDate) < 0) minDate = date;
+            }
+        }
+
+        long msToDays = (1000 * 60 * 60 * 24);
+        long startDays = minDate.getTime()/ msToDays;
+        long endDays = Calendar.getInstance().getTime().getTime() / msToDays;
+        long diffDays = endDays - startDays;
+
+        LineChartConfig lineConfig = new LineChartConfig();
+        ArrayList<String> days = new ArrayList<>();
+        for (long i = -diffDays; i <= 0; i++) {
+            days.add(String.valueOf(i));
+        }
+        Data<LineChartConfig> dataX = lineConfig.data().labelsAsList(days);
+        for (User user : users) {
+            int r = rand.nextInt(255);
+            int g = rand.nextInt(255);
+            int b = rand.nextInt(255);
+            String rgb = "rgb(" + String.valueOf(r) + ", " + String.valueOf(g) + ", " + String.valueOf(b) + ")";
+            dataX.addDataset(new LineDataset().label(user.getName()).borderColor(rgb));
+        }
+        dataX.and()
+                .options()
+                .responsive(true)
+                .title()
+                .display(true)
+                .text("Score over the last days")
+                .and()
+                .tooltips()
+                .mode(InteractionMode.INDEX)
+                .and()
+                .hover()
+                .mode(InteractionMode.INDEX)
+                .and()
+                .scales()
+                .add(Axis.X, new CategoryScale()
+                        .scaleLabel()
+                        .display(true)
+                        .labelString("Day")
+                        .and())
+                .add(Axis.Y, new LinearScale()
+                        .scaleLabel()
+                        .display(true)
+                        .labelString("Score")
+                        .and())
+                .and()
+                .done();
+
+
+        int j = 0;
+        for (Dataset<?, ?> ds : lineConfig.data().getDatasets()) {
+            LineDataset lds = (LineDataset) ds;
+            List<Double> data = new ArrayList<>();
+            List<Score> scores = new ArrayList<>();
+            for (int i = (int)diffDays; i >= 0; i--) {
+                for (Score score : users.get(j).getScores()) {
+                    if (endDays - score.getDate().getTime() / msToDays == i) scores.add(score);
+                }
+                data.add(Util.getEndScore(scores));
+            }
+            lds.dataAsList(data);
+            j++;
+        }
+
+        ChartJs chart = new ChartJs(lineConfig);
+
+        return chart;
     }
 
 
