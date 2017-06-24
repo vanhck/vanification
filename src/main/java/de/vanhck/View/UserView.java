@@ -7,6 +7,8 @@ import de.vanhck.Util;
 import de.vanhck.data.Score;
 import de.vanhck.data.User;
 import de.vanhck.data.UserDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.*;
@@ -18,6 +20,9 @@ import java.util.*;
  * @version 1.0
  */
 public class UserView extends ClosableView {
+
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     private User user;
     private GridLayout bestUsers;
     private UserDAO userSaver;

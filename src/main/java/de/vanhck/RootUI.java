@@ -8,6 +8,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import de.vanhck.View.*;
+import de.vanhck.data.OptionDAO;
 import de.vanhck.data.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,6 +26,8 @@ public class RootUI extends UI {
     private VerticalLayout layout;
     @Autowired
     private UserDAO userSaver;
+    @Autowired
+    private OptionDAO optionSaver;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -62,6 +65,15 @@ public class RootUI extends UI {
             }
         });
         layout.addComponent(navigateToUserRegistrationViewButton);
+
+        Button navigateToAdminViewButton = new Button("goto admin");
+        navigateToAdminViewButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                (new AdminView(optionSaver, userSaver, mainView,layout)).show();
+            }
+        });
+        layout.addComponent(navigateToAdminViewButton);
 
         Button navigateToRemoveUserViewButton = new Button("goto remove user");
         navigateToRemoveUserViewButton.addClickListener(new Button.ClickListener() {

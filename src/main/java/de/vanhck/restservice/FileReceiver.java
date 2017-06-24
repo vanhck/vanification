@@ -35,6 +35,9 @@ public class FileReceiver {
     @Autowired
     private ScoreDAO scoreDAO;
 
+    @Autowired
+    private OptionDAO optionDAO;
+
     private static void printLine(String toPrint) {
         System.out.println(prefix + toPrint);
     }
@@ -46,7 +49,14 @@ public class FileReceiver {
                 byte[] bytes = file.getBytes();
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 try {
-                    new FileParser(keyNameValueDAO, drivingResultDAO, drivingKeyValueDAO, userDAO, scoreDAO).createDrivingResultFromXML(bis);
+                    Option option;
+                    if (!optionDAO.findAll().iterator().hasNext()) {
+                        option = new Option();
+                        optionDAO.save(option);
+                    } else {
+                        option = optionDAO.findAll().iterator().next();
+                    }
+                    new FileParser(keyNameValueDAO, drivingResultDAO, drivingKeyValueDAO, userDAO, scoreDAO,option).createDrivingResultFromXML(bis);
 
                 } catch (Exception e) {//FIXME, bad bad
                     log.error("Couldn't read file.", e);

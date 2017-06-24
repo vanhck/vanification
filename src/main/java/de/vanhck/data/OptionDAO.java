@@ -5,8 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import javax.transaction.Transactional;
 
 /**
- * Created by Lotti on 6/24/2017.
+ * Created by renx on 24.06.17.
  */
 @Transactional
-public interface ScoreDAO extends CrudRepository<Score, Long>{
+public interface OptionDAO extends CrudRepository<Option,Long> {
 }

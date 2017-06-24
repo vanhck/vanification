@@ -24,16 +24,18 @@ public class FileParser {
     private final DrivingKeyValueDAO drivingKeyValueDAO;
     private final UserDAO userDao;
     private final ScoreDAO scoreDao;
+    private final Option option;
     private KeyNameValueDAO keyNameValueDao;
     private DrivingResultDAO resultDAO;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO, UserDAO userDAO, ScoreDAO scoreDao){
+    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO, UserDAO userDAO, ScoreDAO scoreDao, Option option){
         this.keyNameValueDao = keyNameValueDao;
         this.resultDAO = resultDAO;
         this.drivingKeyValueDAO = drivingKeyValueDAO;
         this.userDao = userDAO;
         this.scoreDao = scoreDao;
+        this.option = option;
     }
 
     public boolean createDrivingResultFromXML(InputStream is) throws ParserConfigurationException, IOException, SAXException {
@@ -55,7 +57,7 @@ public class FileParser {
 
         }
         resultDAO.save(drivingResult);
-        Score score = Scoring.getScore(drivingResult, drivingKeyValueDAO);
+        Score score = Scoring.getScore(drivingResult, drivingKeyValueDAO, option);
         scoreDao.save(score);
         drivingResult.getDriver().addScore(score);
         userDao.save(drivingResult.getDriver());
