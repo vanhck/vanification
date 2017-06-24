@@ -68,7 +68,7 @@ public class Util {
         double endCourse = 0;
 
         for (Score score : scores) {
-            if (score.getDate().after(from)) {
+            if (score.getDate() != null && score.getDate().after(from)) {
                 endCourse += score.getCourse();
                 endScore += score.getScore();
             }
@@ -81,7 +81,7 @@ public class Util {
         Date date = new Date(0);
 
         for (Score score : scores) {
-            if (score.getDate().after(date)) {
+            if (score.getDate() != null && score.getDate().after(date)) {
                 date = score.getDate();
                 endScore = score.getScore() / score.getCourse();
             }

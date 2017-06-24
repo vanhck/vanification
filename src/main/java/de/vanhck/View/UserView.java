@@ -63,7 +63,7 @@ public class UserView extends ClosableView {
         newDate = cal.getTime();
         layout.addComponent(new Label("" + Util.getScoreFromTime(user.getScores(),newDate)),3,0);
         layout.addComponent(new Label("letzte Fahrt"), 4, 1);
-        layout.addComponent(new Label("" + Util.getEndScore(user.getScores())),4,0);
+        layout.addComponent(new Label("" + Util.getLastScore(user.getScores())),4,0);
 
 
         addComponent(layout);
@@ -88,7 +88,7 @@ public class UserView extends ClosableView {
         tmpUsers.sort(new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
-                return (int) Math.round(Util.getEndScore(o1.getScores()) - Util.getEndScore(o2.getScores()));
+                return (int) Math.round(Util.getEndScore(o2.getScores()) - Util.getEndScore(o1.getScores()));
 
             }
         });
