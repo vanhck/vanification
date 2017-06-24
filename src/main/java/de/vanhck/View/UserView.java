@@ -58,7 +58,7 @@ public class UserView extends ClosableView {
         layout.addComponent(new Label("Zeitraum"), 0 ,1);
         layout.addComponent(new Label("Gesamt"),1,1);
         layout.addComponent(new Label("" + Math.round(Util.getEndScore(user.getScores()))),1,0);
-        layout.addComponent(new Label("lestzter Monat"),2,1);
+        layout.addComponent(new Label("letzter Monat"),2,1);
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
