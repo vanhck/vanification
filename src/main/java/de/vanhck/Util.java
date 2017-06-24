@@ -1,5 +1,7 @@
 package de.vanhck;
 
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Label;
 import de.vanhck.data.Score;
 import org.apache.commons.codec.binary.Base64;
 
@@ -49,6 +51,10 @@ public class Util {
                 password.toCharArray(), salt, iterations, desiredKeyLen)
         );
         return Base64.encodeBase64String(key.getEncoded());
+    }
+
+    public static Label makeBold(Label label) {
+        return new Label("<b>" + label.getValue() + "</b>", ContentMode.HTML);
     }
 
     public static double getEndScore(Collection<Score> scores) {

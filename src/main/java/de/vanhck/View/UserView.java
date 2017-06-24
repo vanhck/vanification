@@ -93,20 +93,31 @@ public class UserView extends ClosableView {
             }
         });
         for (int i = 1; i <= tmpUsers.size(); i++) {
-            bestUsers.addComponent(new Label("" + i), 0, i);
+
+
+            Label index = new Label("" + i);
+            long scoreInt = Math.round(Util.getEndScore(tmpUsers.get(i - 1).getScores()));
+            Label scoreLabel = new Label("" + scoreInt);
+            Label nameLabel = new Label(tmpUsers.get(i - 1).getName());
             User user = tmpUsers.get(i - 1);
-            long scoreInt = Math.round(Util.getEndScore(user.getScores()));
-            bestUsers.addComponent(new Label("" + scoreInt), 1, i);
-            bestUsers.addComponent(new Label(user.getName()), 2, i);
+            if (user.getName().equals(this.user.getName())) {
+                index = Util.makeBold(index);
+                scoreLabel = Util.makeBold(scoreLabel);
+                nameLabel = Util.makeBold(nameLabel);
+            }
+            bestUsers.addComponent(index, 0, i);
+            bestUsers.addComponent(scoreLabel, 1, i);
+            bestUsers.addComponent(nameLabel, 2, i);
         }
 
 
-        //TODO get number of users to display
 
 
         addComponent(new Label("Bestenliste"));
         addComponent(bestUsers);
     }
+
+
 
     private void buildCompareThing() {
         ComboBox comboBox = new ComboBox("Person zum Vergleich auswählen");
