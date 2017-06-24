@@ -3,6 +3,7 @@ package de.vanhck.View;
 import com.vaadin.ui.*;
 import de.vanhck.Util;
 import de.vanhck.data.User;
+import de.vanhck.data.UserDAO;
 
 /**
  * Created by Jonas on 24.06.2017.
@@ -18,8 +19,11 @@ public class UserRegistrationView extends ClosableView {
     private PopupView p;
     private PopupView q;
 
-    public UserRegistrationView(Layout parentComponent, Layout toClose) {
+    private UserDAO userSaver;
+
+    public UserRegistrationView(UserDAO userSaver, Layout parentComponent, Layout toClose) {
         super(parentComponent, toClose);
+        this.userSaver = userSaver;
         p = new PopupView(null, new Label("Benutzer erfolgreich hinzugefügt"));
         q = new PopupView(null, new Label("Fehler"));
 
@@ -49,6 +53,7 @@ public class UserRegistrationView extends ClosableView {
             try {
                 String hash = Util.getSaltedHash(pw.getValue());
                 User newUser = new User(name.getValue(), hash);
+                userSaver.save(newUser);
                 //TODO add user to db
 
                 name.clear();

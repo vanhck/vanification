@@ -11,6 +11,8 @@ import de.vanhck.View.LoginView;
 import de.vanhck.View.MainView;
 import de.vanhck.View.TestView;
 import de.vanhck.View.UserRegistrationView;
+import de.vanhck.data.UserDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window
@@ -24,6 +26,8 @@ import de.vanhck.View.UserRegistrationView;
 public class RootUI extends UI {
     private MainView mainView;
     private VerticalLayout layout;
+    @Autowired
+    private UserDAO userSaver;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -57,7 +61,7 @@ public class RootUI extends UI {
         navigateToUserRegistrationViewButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                (new UserRegistrationView(mainView,layout)).show();
+                (new UserRegistrationView(userSaver, mainView,layout)).show();
             }
         });
         layout.addComponent(navigateToUserRegistrationViewButton);
