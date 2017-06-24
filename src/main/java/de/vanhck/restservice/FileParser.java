@@ -21,14 +21,16 @@ import java.io.InputStream;
 public class FileParser {
 
     private final DrivingKeyValueDAO drivingKeyValueDAO;
+    private final UserDAO userDao;
     private KeyNameValueDAO keyNameValueDao;
     private DrivingResultDAO resultDAO;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO){
+    public FileParser(KeyNameValueDAO keyNameValueDao, DrivingResultDAO resultDAO, DrivingKeyValueDAO drivingKeyValueDAO, UserDAO userDAO){
         this.keyNameValueDao = keyNameValueDao;
         this.resultDAO = resultDAO;
         this.drivingKeyValueDAO = drivingKeyValueDAO;
+        this.userDao = userDAO;
     }
 
     public boolean createDrivingResultFromXML(InputStream is) throws ParserConfigurationException, IOException, SAXException {
@@ -89,7 +91,11 @@ public class FileParser {
         }
         Element generalElement = (Element) generalList.item(0);
         String fin = generalElement.getElementsByTagName("fin").item(0).getTextContent();
-        String user = generalElement.getElementsByTagName("user").item(0).getTextContent();
+        String userName = generalElement.getElementsByTagName("user").item(0).getTextContent();
+        User user = userDao.findByName(userName);
+        if(user == null){
+            throw new IllegalArgumentException("user isn't registered, please register first!");
+        }
         Double drivenKM = Double.valueOf(generalElement.getElementsByTagName("drivenKM").item(0).getTextContent());
         return new DrivingResult(fin, user, drivenKM);
     }

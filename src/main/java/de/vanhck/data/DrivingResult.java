@@ -18,15 +18,16 @@ public class DrivingResult {
     private long id;
 
     private  String fin;
-    private  String driversName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private  User driver;
     private  Double drivenKM;
 
     @OneToMany(cascade = CascadeType.MERGE, mappedBy = "matchingResult")
     private Collection<DrivingKeyValue> values;
 
-    public DrivingResult(@NotNull  String fin,@NotNull String driversName,@NotNull Double drivenKM) {
+    public DrivingResult(@NotNull  String fin,@NotNull User driver,@NotNull Double drivenKM) {
         this.fin = fin;
-        this.driversName = driversName;
+        this.driver = driver;
         this.drivenKM = drivenKM;
         this.values = new ArrayList<>();
     }
@@ -42,8 +43,8 @@ public class DrivingResult {
         return values;
     }
 
-    public String getDriversName() {
-        return driversName;
+    public User getDriver() {
+        return driver;
     }
 
     public String getFin() {

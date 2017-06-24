@@ -1,9 +1,6 @@
 package de.vanhck.restservice;
 
-import de.vanhck.data.DrivingKeyValue;
-import de.vanhck.data.DrivingKeyValueDAO;
-import de.vanhck.data.DrivingResultDAO;
-import de.vanhck.data.KeyNameValueDAO;
+import de.vanhck.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,8 @@ public class FileReceiver {
     private KeyNameValueDAO keyNameValueDAO;
     @Autowired
     private DrivingResultDAO drivingResultDAO;
+    @Autowired
+    private UserDAO userDAO;
 
     @Autowired
     private DrivingKeyValueDAO drivingKeyValueDAO;
@@ -45,7 +44,7 @@ public class FileReceiver {
                 byte[] bytes = file.getBytes();
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 try {
-                    new FileParser(keyNameValueDAO, drivingResultDAO, drivingKeyValueDAO).createDrivingResultFromXML(bis); //FIXME
+                    new FileParser(keyNameValueDAO, drivingResultDAO, drivingKeyValueDAO, userDAO).createDrivingResultFromXML(bis); //FIXME
                 } catch (Exception e) {//FIXME, bad bad
                     log.error("Couldn't read file.", e);
                 }
