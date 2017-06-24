@@ -61,6 +61,7 @@ public class Util {
         return endCourse;
     }
 
+
     public static Label makeBold(Label label) {
         return new Label("<b>" + label.getValue() + "</b>", ContentMode.HTML);
     }

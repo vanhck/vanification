@@ -4,6 +4,7 @@ import com.vaadin.data.HasValue;
 import com.vaadin.server.FileResource;
 import com.vaadin.ui.*;
 import de.vanhck.Util;
+import de.vanhck.data.Score;
 import de.vanhck.data.User;
 import de.vanhck.data.UserDAO;
 
@@ -143,42 +144,149 @@ public class UserView extends ClosableView {
         addComponent(comboBox);
 
         GridLayout layout = new GridLayout(3,8);
-        Label myName = new Label();
-        layout.setSizeFull();
-        myName.setValue(user.getName());
-        Label myScore = new Label();
-        Label myCourse = new Label();
-        myScore.setValue(Util.getEndScore(user.getScores()) + "");
-        myCourse.setValue(Util.getSumCourse(user.getScores()) + "");
-        Label compareScore = new Label();
-        Label compareCourse = new Label();
 
-        Label compareName = new Label();
-        compareName.setValue(comboBox.getValue() == null ? "" : comboBox.getValue().toString());
+        layout.setSizeFull();
+        GridColumn col1 = new GridColumn(new GridItem(user),layout,1);
+        GridColumn col2 = new GridColumn(null, layout, 2);
+
+
 
         comboBox.addValueChangeListener(new HasValue.ValueChangeListener() {
             @Override
             public void valueChange(HasValue.ValueChangeEvent valueChangeEvent) {
-                compareName.setValue(comboBox.getValue() == null ? "" : comboBox.getValue().toString());
-                compareScore.setValue(comboBox.getValue() == null ? "" : "" + Util.getEndScore(((User) comboBox.getValue()).getScores()));
-                compareCourse.setValue(comboBox.getValue() == null ? "" : "" + Util.getSumCourse(((User) comboBox.getValue()).getScores()));
+            col2.setGridItem(comboBox.getValue() == null ? null : new GridItem((User) comboBox.getValue()));
             }
         });
 
-        layout.addComponent(myName, 1, 0);
-        layout.addComponent(compareName, 2, 0);
-        layout.addComponent(myScore, 1, 1);
-        layout.addComponent(compareScore, 2, 1);
-        layout.addComponent(myCourse, 1, 2);
-        layout.addComponent(compareCourse, 2, 2);
+
         layout.addComponent(new Label("Score"),0,1);
         layout.addComponent(new Label("gefahrene Kilometer"),0,2);
         layout.addComponent(new Label("durchschnittlicher Verbrauch"),0, 3);
         layout.addComponent(new Label("Vollbremsungen"), 0, 4);
         layout.addComponent(new Label("harte Beschleunigungen"), 0, 5);
-        layout.addComponent(new Label("Zeit der Querbeschleunigung"), 0, 6);
+        layout.addComponent(new Label("Stops"), 0, 6);
         layout.addComponent(new Label("Zeit der gleichm. Fahrt"),0 ,7);
 
         addComponent(layout);
+    }
+
+
+    private class GridColumn {
+        private GridItem item;
+
+        private Label name;
+        private Label score;
+        private Label km;
+        private Label avConsumption;
+        private Label hardStops;
+        private Label hardAccelerations;
+        private Label stops;
+        private Label timeWithConstKmH;
+
+        public GridColumn(GridItem item, GridLayout layout, int column) {
+            name = new Label();
+            score = new Label();
+            km = new Label();
+            avConsumption = new Label();
+            hardStops = new Label();
+            hardAccelerations = new Label();
+            stops = new Label();
+            timeWithConstKmH = new Label();
+            setGridItem(item);
+
+            layout.addComponent(name, column, 0);
+            layout.addComponent(score, column, 1);
+            layout.addComponent(km, column, 2);
+            layout.addComponent(avConsumption, column, 3);
+            layout.addComponent(hardStops, column, 4);
+            layout.addComponent(hardAccelerations, column, 5);
+            layout.addComponent(stops, column, 6);
+            layout.addComponent(timeWithConstKmH, column, 7);
+
+
+        }
+
+        public void setGridItem(GridItem item) {
+            this.item = item;
+            name.setValue(item == null ? "" : item.getName());
+            score.setValue(item == null ? "" : item.getScore() + "");
+            km.setValue(item == null ? "" : item.getDrivenKilometers() + "");
+            avConsumption.setValue(item == null ? "" : item.getAverageConsumption() + "");
+            hardStops.setValue(item == null ? "" : item.getHardStopsCount() + "");
+            hardAccelerations.setValue(item == null ? "" : item.getHardAccelerationCount() + "");
+            stops.setValue(item == null ? "" : item.getStopsCount() + "");
+            timeWithConstKmH.setValue(item == null ? "" : item.getConstantVelocityKm() + "");
+        }
+    }
+
+    private class GridItem {
+        private String name;
+        private Double score;
+        private Double drivenKilometers;
+        private Double averageConsumption;
+        private Double hardStopsCount;
+        private Double hardAccelerationCount;
+        private Double constantVelocityKm;
+
+        public String getName() {
+            return name;
+        }
+
+        public int getScore() {
+            return (int) Math.round(score);
+        }
+
+        public Double getDrivenKilometers() {
+            return drivenKilometers;
+        }
+
+        public Double getAverageConsumption() {
+            return averageConsumption;
+        }
+
+        public int getHardStopsCount() {
+            return (int) Math.round(hardStopsCount);
+        }
+
+        public int getHardAccelerationCount() {
+            return (int) Math.round(hardAccelerationCount);
+        }
+
+        public Double getConstantVelocityKm() {
+            return constantVelocityKm;
+        }
+
+        public int getStopsCount() {
+            return (int) Math.round(stopsCount);
+        }
+
+        private Double stopsCount;
+
+        public GridItem(User user) {
+            name = user.getName();
+
+            score = Util.getEndScore(user.getScores());
+
+            drivenKilometers = 0d;
+            averageConsumption = 0d;
+            hardStopsCount = 0d;
+            hardAccelerationCount = 0d;
+            constantVelocityKm = 0d;
+            stopsCount = 0d;
+
+            //TODO neue score berechnung hierher ziehen
+            for (Score score: user.getScores()) {
+                drivenKilometers += score.getCourse();
+                averageConsumption += score.getAverageFuelConsumption();
+                hardStopsCount += score.getHardAccelerationCount();
+                hardAccelerationCount += score.getHardAccelerationCount();
+                constantVelocityKm += score.getConstantVelocityKm();
+                stopsCount += score.getStopCount();
+            }
+            averageConsumption = averageConsumption / user.getScores().size();
+
+        }
+
+
     }
 }

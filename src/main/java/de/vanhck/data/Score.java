@@ -18,6 +18,36 @@ public class Score {
 
     private double course;
 
+    private double averageFuelConsumption;
+
+    private double hardStopCount;
+
+    private double hardAccelerationCount;
+
+    private double constantVelocityKm;
+
+    public double getAverageFuelConsumption() {
+        return averageFuelConsumption;
+    }
+
+    public double getHardStopCount() {
+        return hardStopCount;
+    }
+
+    public double getHardAccelerationCount() {
+        return hardAccelerationCount;
+    }
+
+    public double getConstantVelocityKm() {
+        return constantVelocityKm;
+    }
+
+    public double getStopCount() {
+        return stopCount;
+    }
+
+    private double stopCount;
+
     @ManyToOne(cascade = CascadeType.ALL)
     public User user;
 
@@ -33,11 +63,17 @@ public class Score {
         return course;
     }
 
-    public Score(Double score, Double course, User driver, Date creationDate){
+    public Score(Double score, Double course, User driver, Date creationDate, Double averageFuelConsumption,
+                 Double hardStopCount, Double hardAccelerationCount, Double constantVelocityKm, Double stopCount){
         this.score = score;
         this.course = course;
         this.user = driver;
         this.date = creationDate;
+        this.averageFuelConsumption = averageFuelConsumption;
+        this.hardStopCount = hardStopCount;
+        this.hardAccelerationCount = hardAccelerationCount;
+        this.constantVelocityKm = constantVelocityKm;
+        this.stopCount = stopCount;
     }
 
    public  Score(){}
