@@ -64,13 +64,6 @@ public class AdminView extends ClosableView {
         hardStopsSlider.setValue(option.getaHardStopCount());
         hardStopsSlider.setOrientation(SliderOrientation.HORIZONTAL);
         layout.addComponent(hardStopsSlider, 1, 2);
-        hardStopsSlider.addValueChangeListener(new HasValue.ValueChangeListener<Double>() {
-            @Override
-            public void valueChange(HasValue.ValueChangeEvent<Double> valueChangeEvent) {
-                option.setaHardStopCount(valueChangeEvent.getValue());
-                optionSaver.save(option);
-            }
-        });
 
         layout.addComponent(new Label("Harte Beschleunigungen"), 0, 3);
         Slider hardAcclsSlider = new Slider(0, 1, 2);
