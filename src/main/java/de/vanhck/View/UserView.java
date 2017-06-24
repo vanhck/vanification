@@ -1,8 +1,6 @@
 package de.vanhck.View;
 
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FileResource;
-import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import de.vanhck.data.User;
 
@@ -22,39 +20,44 @@ public class UserView extends ClosableView {
         super(parentComponent, toClose);
         this.user = user;
 
-
-
-
-        //System.out.println((new File("")).getAbsolutePath());
         Image image = new Image("", new FileResource(new File((new File("")).getAbsolutePath()
                 + "\\src\\main\\resources\\price.png")));
         image.setCaption("Preis für den Besten");
         addComponent(image);
 
         setComponentAlignment(image, Alignment.TOP_CENTER);
+        addComponent(new Label(""));
         buildBestUserList();
+        addComponent(new Label(""));
         buildOverviewChart();
-
-    }
-
-    private Image getGreenIcon() {
-        return new Image("", new FileResource(new File((new File("")).getAbsolutePath()
-                + "\\src\\main\\resources\\icons\\green.png")));
+        addComponent(new Label(""));
+        buildCompareThing();
     }
 
     private void buildOverviewChart() {
         addComponent(new Label("Übersicht"));
 
-        GridLayout layout = new GridLayout();
+        GridLayout layout = new GridLayout(5,2);
+        layout.setSpacing(true);
+        layout.setSizeFull();
+        layout.addComponent(new Label("Score"),0,0);
+        layout.addComponent(new Label("Zeitraum"), 0 ,1);
+        layout.addComponent(new Label("Gesamt"),1,1);
+        layout.addComponent(new Label("lestzter Monat"),2,1);
+        layout.addComponent(new Label("letzte Woche"), 3, 1);
+        layout.addComponent(new Label("letzte Fahrt"), 4, 1);
 
-        Label label = new Label(VaadinIcons.SMILEY_O.getHtml(), ContentMode.HTML);
-        Label label2 = new Label(VaadinIcons.HEART.getHtml(), ContentMode.HTML);
-        Label label1 = new Label(VaadinIcons.ALARM.getHtml(), ContentMode.HTML);
+        int all = 750;
+        int lastMonth = 600;
+        int lastWeek = 650;
+        int lastDrive = 500;
 
-        addComponent(label2);
-        addComponent(label);
+        layout.addComponent(new Label("" + all), 1,0);
+        layout.addComponent(new Label("" + lastMonth), 2, 0);
+        layout.addComponent(new Label("" + lastWeek), 3, 0);
+        layout.addComponent(new Label("" + lastDrive) ,4 ,0);
 
-        addComponent(label1);
+        addComponent(layout);
     }
 
     private void buildBestUserList() {
@@ -70,5 +73,25 @@ public class UserView extends ClosableView {
 
         addComponent(new Label("Bestenliste"));
         addComponent(bestUsers);
+    }
+
+    private void buildCompareThing() {
+        ComboBox comboBox = new ComboBox("Person zum Vergleich auswählen");
+        comboBox.setItems("option1","option2");
+        comboBox.setTextInputAllowed(false);
+
+        addComponent(comboBox);
+
+        GridLayout layout = new GridLayout(3,7);
+
+        layout.addComponent(new Label("Score"),0,0);
+        layout.addComponent(new Label("gefahrene Kilometer"),0,1);
+        layout.addComponent(new Label("durchschnittlicher Verbrauch"),0, 2);
+        layout.addComponent(new Label("Vollbremsungen"), 0, 3);
+        layout.addComponent(new Label("harte Beschleunigungen"), 0, 4);
+        layout.addComponent(new Label("Zeit der Querbeschleunigung"), 0, 5);
+        layout.addComponent(new Label("Zeit der gleichm. Fahrt"),0 ,6);
+
+        addComponent(layout);
     }
 }
